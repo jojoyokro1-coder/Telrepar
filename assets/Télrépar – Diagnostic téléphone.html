@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Télrépar – Diagnostic téléphone</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--card:#141414;--ink:#F3F1EC;--mute:#8E8E88;--line:#262626;--acc:#FFB020;--accink:#0a0a0a;--ok:#4CD1A0;--mid:#FFB020;--bad:#FF6B7A;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+h1,h2,h3,.disp{font-family:Syne,"DM Sans",system-ui,sans-serif;letter-spacing:-.03em;line-height:1.02;margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--acc);color:var(--accink);padding:8px 12px;z-index:100}
+#loader{position:fixed;inset:0;background:var(--bg);z-index:99;display:flex;flex-direction:column;justify-content:space-between;padding:28px;transition:transform .7s cubic-bezier(.7,0,.2,1)}
+#loader.done{transform:translateY(-100%)}
+#loader .n{font-family:Syne,sans-serif;font-weight:800;font-size:clamp(4rem,22vw,10rem);text-align:right;color:var(--acc)}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:rgba(10,10,10,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{font-family:Syne,sans-serif;font-weight:800;font-size:1.25rem;text-decoration:none}
+nav{display:flex;gap:26px}nav a{text-decoration:none;color:var(--mute);font-weight:500}nav a:hover{color:var(--ink)}
+.time{color:var(--mute);font-size:.85rem}
+.menu{display:none;background:none;border:1px solid var(--line);border-radius:99px;padding:8px 16px}
+#ov{position:fixed;inset:0;background:var(--bg);z-index:30;display:none;flex-direction:column;justify-content:center;gap:18px;padding:32px}
+#ov.open{display:flex}#ov a{font-family:Syne,sans-serif;font-weight:800;font-size:2.6rem;text-decoration:none}
+#ov button{position:absolute;top:20px;right:20px;background:none;border:1px solid var(--line);border-radius:99px;padding:8px 16px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+.hero{position:relative;overflow:hidden;padding:72px 0 88px}
+.hero h1{font-size:clamp(2.6rem,9vw,6.4rem);font-weight:800;max-width:11ch}
+.hero p{max-width:46ch;color:var(--mute);font-size:1.1rem;margin:22px 0 30px}
+.wm{position:absolute;right:-2%;bottom:-6%;font-family:Syne,sans-serif;font-weight:800;font-size:clamp(5rem,22vw,17rem);color:#161616;line-height:.8;pointer-events:none;user-select:none;white-space:nowrap}
+.btn{display:inline-block;padding:15px 26px;border-radius:99px;border:1.5px solid var(--ink);background:none;font-weight:700;text-decoration:none;margin-right:10px;margin-bottom:10px}
+.btn.p{background:var(--acc);border-color:var(--acc);color:var(--accink)}
+section{padding:72px 0;border-top:1px solid var(--line)}
+.lab{color:var(--mute);margin:0 0 10px}
+section h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;margin-bottom:34px;max-width:16ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.cat{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;text-align:left;display:flex;flex-direction:column;gap:10px;min-height:170px;justify-content:space-between;transition:border-color .2s,transform .2s}
+.cat:hover{border-color:var(--acc)}.cat .ic{font-size:34px}.cat b{font-family:Syne,sans-serif;font-size:1.3rem}.cat small{color:var(--mute)}
+.back{background:none;border:none;color:var(--acc);font-weight:700;padding:4px 0;margin-bottom:18px}
+.list{display:flex;flex-direction:column;gap:10px;max-width:640px}
+.sym{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;display:flex;justify-content:space-between;gap:12px;text-align:left}
+.sym:hover{border-color:var(--acc)}
+.res{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:28px;max-width:680px;animation:up .35s ease-out}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.badge{display:inline-block;padding:5px 14px;border-radius:99px;font-weight:700;font-size:.85rem;border:1.5px solid currentColor;margin-bottom:14px}
+.ok{color:var(--ok)}.mid{color:var(--mid)}.bad{color:var(--bad)}
+.res h3{font-size:1.9rem;margin-bottom:8px}.res h4{margin:22px 0 8px;font-size:1rem}.res p{color:var(--mute);margin:0}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--acc);color:var(--accink);display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;counter-reset:h}
+.how div{border-top:2px solid var(--acc);padding-top:16px;counter-increment:h}
+.how div::before{content:counter(h);font-family:Syne,sans-serif;font-weight:800;font-size:2.4rem;color:var(--acc)}
+.how h3{font-size:1.4rem;margin:6px 0}.how p{color:var(--mute);margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px}
+.stats b{display:block;font-family:Syne,sans-serif;font-size:clamp(3rem,8vw,5rem);line-height:1}.stats span{color:var(--mute)}
+.cta{text-align:left}.cta h2{max-width:14ch}
+footer{border-top:1px solid var(--line);padding:32px 0 48px;color:var(--mute);display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+#modal{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px}
+#modal.open{display:flex}
+.box{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:28px;width:100%;max-width:480px}
+.box h2{font-size:2rem;margin-bottom:18px}
+label{display:block;font-weight:500;margin:0 0 14px}
+input,textarea{display:block;width:100%;margin-top:6px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit}
+.x{background:none;border:none;color:var(--mute);margin-top:10px;width:100%}
+@media(max-width:760px){nav,.time{display:none}.menu{display:block}.hero{padding-top:44px}}
+@media (prefers-reduced-motion:reduce){#loader{transition:none}.res{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<div id="loader"><span class="brand">Télrépar</span><div class="n" id="cnt">000</div></div>
+<header>
+  <a class="brand" href="#top">Télrépar</a>
+  <nav><a href="#top">Accueil</a><a href="#diag">Diagnostic</a><a href="#how">Méthode</a><a href="#contact">Contact</a></nav>
+  <span class="time" id="time"></span>
+  <button class="menu" id="mo" aria-label="Ouvrir le menu">Menu</button>
+</header>
+<div id="ov"><button id="mc">Fermer</button><a href="#top">Accueil</a><a href="#diag">Diagnostic</a><a href="#how">Méthode</a><a href="#contact">Contact</a></div>
+<main id="main">
+<div class="hero" id="top"><div class="wrap">
+  <h1>Ton téléphone a un souci. Trouvons pourquoi.</h1>
+  <p>Choisis la panne, suis les étapes, et sache si tu peux réparer seul ou s’il faut passer chez un réparateur.</p>
+  <a class="btn p" href="#diag">Lancer le diagnostic</a><button class="btn" data-open>Demander une réparation</button>
+</div><div class="wm" aria-hidden="true">TÉLRÉPAR</div></div>
+
+<section id="diag"><div class="wrap">
+  <p class="lab">Diagnostic</p>
+  <div id="root"></div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <p class="lab">Méthode</p><h2>Trois étapes, sans jargon.</h2>
+  <div class="how">
+    <div><h3>Choisis la catégorie</h3><p>Écran, batterie, réseau… Cible la zone du problème.</p></div>
+    <div><h3>Décris ce que tu vois</h3><p>Sélectionne le symptôme qui correspond le mieux.</p></div>
+    <div><h3>Suis les étapes</h3><p>Essaie les solutions simples, puis vois si un réparateur est nécessaire.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap"><div class="stats" id="stats"></div></div></section>
+
+<section id="contact"><div class="wrap cta">
+  <h2>Un souci que l’appli ne règle pas ?</h2>
+  <button class="btn p" data-open>Demander une réparation</button>
+</div></section>
+</main>
+<div class="wrap"><footer><span class="brand">Télrépar</span><span>Diagnostic de téléphone · Abidjan</span></footer></div>
+
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="box" id="mb"></div></div>
+
+<script>
+const S=(t,c,f,l,w)=>({t,c,f,l,w});
+const DATA=[
+{id:'ecran',n:'Écran',i:'📱',s:[
+S('Écran tactile qui ne répond plus','Saleté, protection d’écran ou bug logiciel.',['Nettoie l’écran et retire la protection','Redémarre le téléphone','Démarre en mode sans échec pour tester'],'mid','Si rien ne change ou si l’écran est fissuré, passe chez un réparateur.'),
+S('Écran noir mais le téléphone vibre','Écran ou nappe endommagés, ou plantage système.',['Maintiens Marche + Volume bas 15 secondes','Branche le chargeur 10 minutes puis réessaie'],'bad','Un écran à remplacer est probable : demande un devis.'),
+S('Lignes ou taches sur l’écran','Dalle abîmée après un choc ou de l’humidité.',['Sauvegarde tes données tout de suite','Évite de presser l’écran'],'bad','La dalle doit être remplacée.')]},
+{id:'batterie',n:'Batterie',i:'🔋',s:[
+S('La batterie se vide trop vite','Applications gourmandes ou batterie usée.',['Regarde la consommation par appli dans Réglages','Baisse la luminosité et coupe la localisation','Ferme les applis en arrière-plan'],'mid','Après 2 ans d’usage, une nouvelle batterie règle souvent le problème.'),
+S('Le téléphone ne charge plus','Câble, chargeur ou port de charge encrassé.',['Essaie un autre câble et un autre chargeur','Nettoie le port avec une brosse sèche','Redémarre puis rebranche'],'mid','Si le port bouge ou reste sans effet, fais-le changer.'),
+S('La batterie gonfle','Batterie en fin de vie : risque de surchauffe.',['Arrête de charger et éteins le téléphone','Ne perce ni ne chauffe la batterie'],'bad','Urgent : va chez un réparateur aujourd’hui.')]},
+{id:'perf',n:'Performance',i:'⚡',s:[
+S('Le téléphone est lent','Mémoire pleine ou trop d’applis ouvertes.',['Redémarre le téléphone','Désinstalle les applis inutilisées','Mets à jour le système'],'ok','Si la lenteur revient, sauvegarde et réinitialise le téléphone.'),
+S('Les applis se ferment seules','Appli à mettre à jour ou espace insuffisant.',['Mets à jour l’appli','Vide le cache de l’appli','Libère de l’espace'],'ok','Réinstalle l’appli si le problème continue.')]},
+{id:'reseau',n:'Connectivité',i:'📶',s:[
+S('Pas de réseau mobile','Carte SIM mal placée ou zone peu couverte.',['Active puis désactive le mode avion','Retire et remets la carte SIM','Essaie la SIM dans un autre téléphone'],'mid','Contacte ton opérateur si la SIM ne fonctionne nulle part.'),
+S('Le Wi-Fi se coupe','Box éloignée ou réglages réseau corrompus.',['Oublie le réseau et reconnecte-toi','Redémarre la box','Réinitialise les réglages réseau'],'ok','Teste avec un autre réseau pour savoir si c’est le téléphone.')]},
+{id:'son',n:'Son',i:'🔊',s:[
+S('Personne ne m’entend en appel','Micro obstrué ou autorisation refusée.',['Nettoie l’ouverture du micro','Vérifie les autorisations micro de l’appli','Teste avec des écouteurs'],'mid','Un micro défaillant se remplace facilement.'),
+S('Le haut-parleur grésille','Poussière ou haut-parleur endommagé.',['Baisse le volume','Nettoie la grille à la brosse','Teste en mode sans échec'],'mid','Si le son reste mauvais, fais changer le haut-parleur.')]},
+{id:'photo',n:'Caméra',i:'📷',s:[
+S('Photos floues','Objectif sale ou mise au point bloquée.',['Essuie l’objectif avec un tissu doux','Retire la coque et le film','Redémarre l’appli caméra'],'ok','Un objectif rayé ou abîmé se remplace.'),
+S('La caméra ne s’ouvre pas','Bug de l’appli ou manque de mémoire.',['Libère de l’espace','Vide le cache de l’appli caméra','Redémarre le téléphone'],'mid','Si l’écran reste noir, le module caméra est peut-être en panne.')]},
+{id:'stock',n:'Stockage',i:'💾',s:[
+S('Mémoire pleine','Photos, vidéos et applis volumineuses.',['Sauvegarde photos et vidéos dans le cloud','Supprime les téléchargements et les vidéos WhatsApp','Désinstalle les applis peu utilisées'],'ok','Une carte microSD ajoute de l’espace si ton modèle l’accepte.')]},
+{id:'chaud',n:'Surchauffe',i:'🌡️',s:[
+S('Le téléphone chauffe en charge','Chargeur non adapté ou coque trop épaisse.',['Retire la coque','Utilise le chargeur d’origine','Évite de charger au soleil'],'mid','Si la chaleur est forte, arrête et consulte un réparateur.'),
+S('Il chauffe sans raison','Appli bloquée en arrière-plan.',['Redémarre le téléphone','Ferme les applis gourmandes','Mets à jour le système'],'mid','Si la chaleur persiste avec le téléphone au repos, fais-le contrôler.')]}
+];
+const L={ok:'Facile à régler soi-même',mid:'À surveiller',bad:'Passe chez un réparateur'};
+const root=document.getElementById('root');let cat=null,sym=null;
+function home(){root.innerHTML=`<h2>Quel est le problème ?</h2><div class="grid">${DATA.map(c=>`<button class="cat" data-id="${c.id}"><span class="ic">${c.i}</span><span><b>${c.n}</b><br><small>${c.s.length} problème${c.s.length>1?'s':''}</small></span></button>`).join('')}</div>`;
+root.querySelectorAll('.cat').forEach(b=>b.onclick=()=>{cat=DATA.find(c=>c.id===b.dataset.id);sym=null;view(1)})}
+function symptoms(){root.innerHTML=`<button class="back" id="b">← Toutes les catégories</button><h2>${cat.i} ${cat.n}</h2><div class="list">${cat.s.map((x,k)=>`<button class="sym" data-k="${k}"><span>${x.t}</span><span aria-hidden="true">›</span></button>`).join('')}</div>`;
+b.onclick=()=>{cat=null;view(1)};root.querySelectorAll('.sym').forEach(e=>e.onclick=()=>{sym=cat.s[+e.dataset.k];view(1)})}
+function result(){root.innerHTML=`<button class="back" id="b">← ${cat.n}</button><article class="res"><span class="badge ${sym.l}">${L[sym.l]}</span><h3>${sym.t}</h3><p>${sym.c}</p><h4>Ce que tu peux essayer</h4><ol class="steps">${sym.f.map(f=>`<li>${f}</li>`).join('')}</ol><h4>Si ça ne marche pas</h4><p>${sym.w}</p><p style="margin-top:20px"><button class="btn p" id="ok">Problème résolu</button><button class="btn" data-open>Demander une réparation</button></p></article>`;
+b.onclick=()=>{sym=null;view(1)};ok.onclick=()=>{cat=sym=null;view(1)};bind()}
+function view(scroll){sym?result():cat?symptoms():home();if(scroll)document.getElementById('diag').scrollIntoView({behavior:'smooth'})}
+// modal
+const modal=document.getElementById('modal'),mb=document.getElementById('mb');
+function openM(){mb.innerHTML=`<h2 id="mt">Demander une réparation</h2><label>Nom<input id="fn" autocomplete="name"></label><label>Téléphone<input id="fp" type="tel" autocomplete="tel"></label><label>Modèle et panne<textarea id="fm" rows="3"></textarea></label><button class="btn p" id="send" style="width:100%">Envoyer la demande</button><button class="x" id="cl">Fermer</button>`;
+modal.classList.add('open');fn.focus();cl.onclick=closeM;
+send.onclick=()=>{if(!fn.value.trim()||!fp.value.trim()){fn.focus();return}mb.innerHTML=`<h2 id="mt">Demande enregistrée</h2><p style="color:var(--mute)">Merci ${fn.value?'':''}! Cette page est une démonstration : la demande n’est pas encore transmise à un réparateur.</p><button class="x" id="cl">Fermer</button>`;cl.onclick=closeM}}
+function closeM(){modal.classList.remove('open')}
+modal.onclick=e=>{if(e.target===modal)closeM()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();ov.classList.remove('open')}});
+function bind(){document.querySelectorAll('[data-open]').forEach(b=>b.onclick=openM)}
+// menu
+const ov=document.getElementById('ov');mo.onclick=()=>ov.classList.add('open');mc.onclick=()=>ov.classList.remove('open');ov.querySelectorAll('a').forEach(a=>a.onclick=()=>ov.classList.remove('open'));
+// time
+function tick(){document.getElementById('time').textContent='Abidjan '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',timeZone:'Africa/Abidjan'})}tick();setInterval(tick,30000);
+// stats
+const nS=DATA.reduce((a,c)=>a+c.s.length,0);
+stats.innerHTML=[[DATA.length,'catégories de pannes'],[nS,'symptômes analysés'],['0','à payer pour le diagnostic']].map(([n,t])=>`<div><b>${n}</b><span>${t}</span></div>`).join('');
+// loader
+(function(){const l=document.getElementById('loader'),c=document.getElementById('cnt');let n=0;const fin=()=>l.classList.add('done');
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){fin();return}
+const t=setInterval(()=>{n+=4;if(n>=100){n=100;clearInterval(t);setTimeout(fin,200)}c.textContent=String(n).padStart(3,'0')},28)})();
+home();bind();
+</script>
+</body>
+</html>

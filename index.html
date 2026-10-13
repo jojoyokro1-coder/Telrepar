@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>Telrepar - Diagnostic Téléphone</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Telrepar" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="Telrepar" />
+  <meta name="description" content="Diagnostic gratuit et instantané pour ton smartphone. Trouve la panne, suis les étapes, répare toi-même." />
+
+  <!-- Lien vers le fichier CSS externe -->
+  <link rel="stylesheet" href="styles.css?v=6" />
+</head>
+<body>
+  <main class="app-shell">
+    <!-- Colonne Gauche Desktop (Slogans & Présentation) -->
+    <aside class="desktop-column desktop-left" aria-label="Présentation Telrepar">
+      <div class="desktop-badge">
+        <i data-lucide="sparkles"></i> <span>Diagnostic 100% Gratuit</span>
+      </div>
+      <h1 class="desktop-hero-title">
+        Ton phone a un souci ?<br>
+        <span class="gradient-text">On trouve pourquoi.</span>
+      </h1>
+      <p class="desktop-lead">
+        Diagnostic instantané en 30 secondes, conseils clairs et manipulations exactes avant de payer pour réparer.
+      </p>
+
+      <div class="desktop-feature-cards">
+        <div class="desktop-feature-item">
+          <div class="desktop-feature-icon"><i data-lucide="zap"></i></div>
+          <div class="desktop-feature-copy">
+            <strong>Zéro prise de tête</strong>
+            <small>Sans inscription, sans pub, direct dans ton navigateur.</small>
+          </div>
+        </div>
+        <div class="desktop-feature-item">
+          <div class="desktop-feature-icon"><i data-lucide="stethoscope"></i></div>
+          <div class="desktop-feature-copy">
+            <strong>Le doc de ton phone</strong>
+            <small>Dépannage sur-mesure pour chaque marque et panne.</small>
+          </div>
+        </div>
+        <div class="desktop-feature-item">
+          <div class="desktop-feature-icon"><i data-lucide="shield-check"></i></div>
+          <div class="desktop-feature-copy">
+            <strong>100% Anonyme & Local</strong>
+            <small>Aucune donnée collectée, diagnostic privé.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="desktop-tagline">
+        « Ne change pas de tel sans savoir ce qu'il a. 🔧 »
+      </div>
+    </aside>
+
+    <section class="phone" aria-label="Application Telrepar">
+      <header class="topbar">
+        <button class="icon-button back-button" type="button" aria-label="Retour" data-back hidden>
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <a class="brand" href="#" aria-label="Accueil Telrepar" data-action="navigate" data-page="home">
+          <span class="brand-mark"><i data-lucide="smartphone"></i></span>
+          <span>Telrepar</span>
+        </a>
+        <button class="icon-button" type="button" aria-label="Paramètres" id="settings-btn" data-action="open-settings">
+          <i data-lucide="settings-2"></i>
+        </button>
+      </header>
+
+      <div id="screen" class="screen" aria-live="polite"></div>
+
+      <!-- Modal Paramètres & Options -->
+      <div id="settings-modal" class="modal-backdrop" aria-hidden="true" hidden>
+        <div class="modal-sheet">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <div>
+              <h3 class="sheet-title" id="stg-title">Paramètres</h3>
+              <p class="sheet-subtitle" id="stg-subtitle">Personnalise ton expérience Telrepar</p>
+            </div>
+            <button class="icon-button" id="close-settings" type="button" aria-label="Fermer">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+
+          <div class="sheet-body">
+            <!-- Expérience visuelle -->
+            <div class="sheet-section">
+              <div class="sheet-section-title" id="stg-section-visual">Expérience visuelle</div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <strong id="stg-anim-label">Animations & Particules</strong>
+                  <small id="stg-anim-desc">Effets 3D tilt, particules et rebonds</small>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggle-animations" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <strong id="stg-sound-label">Effets sonores tech</strong>
+                  <small id="stg-sound-desc">Petits bips futuristes aux interactions</small>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggle-sound">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <strong id="stg-lang-label">Langue / Language</strong>
+                  <small id="stg-lang-desc">Français, English, Español</small>
+                </div>
+                <select id="select-lang" class="lang-select" aria-label="Langue de l'application">
+                  <option value="fr">🇫🇷 FR</option>
+                  <option value="en">🇬🇧 EN</option>
+                  <option value="es">🇪🇸 ES</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Appareil & Données -->
+            <div class="sheet-section">
+              <div class="sheet-section-title" id="stg-section-data">Appareil & Données</div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <strong id="stg-device-label">Appareil configuré</strong>
+                  <small id="settings-current-device">Samsung Galaxy S24</small>
+                </div>
+                <button class="small-action-btn" type="button" id="settings-change-device" data-stg-btn="modify">Modifier</button>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <strong id="stg-health-label">Carnet de santé</strong>
+                  <small id="stg-health-desc">Effacer les diagnostics enregistrés</small>
+                </div>
+                <button class="small-action-btn danger" type="button" id="clear-history-btn" data-stg-btn="clear">Vider</button>
+              </div>
+            </div>
+
+            <!-- Partage & À propos -->
+            <div class="sheet-section">
+              <div class="sheet-section-title" id="stg-section-app">Application</div>
+              <button class="secondary share-app-btn" id="share-app-btn" type="button">
+                <i data-lucide="share-2"></i><span id="stg-share-label">Partager l'application</span>
+              </button>
+              <div class="settings-about">
+                <p><strong>Telrepar v2.0</strong> — <span id="stg-about-desc">Diagnostic 100% gratuit & sans collecte de données.</span></p>
+                <p class="about-tagline" id="stg-about-tagline">« Le doc de ton phone 🩺 »</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Notification -->
+      <div id="toast" class="toast" aria-live="assertive" hidden></div>
+
+      <nav class="bottom-nav" aria-label="Navigation principale">
+        <button class="nav-item active" type="button" data-nav="home">
+          <i data-lucide="house"></i><span id="nav-home">Accueil</span>
+        </button>
+        <button class="nav-item" type="button" data-nav="tests">
+          <i data-lucide="flask-conical"></i><span id="nav-tests">Tests Lab</span>
+        </button>
+        <button class="nav-item" type="button" data-nav="history">
+          <i data-lucide="clock-3"></i><span id="nav-history">Historique</span>
+        </button>
+      </nav>
+    </section>
+
+    <!-- Fullscreen Interactive Test Overlay -->
+    <div id="hw-test-overlay" class="hw-overlay" hidden>
+      <div class="hw-overlay-header">
+        <h3 class="hw-overlay-title" id="hw-overlay-title">Test Hardware</h3>
+        <button class="icon-button" id="hw-overlay-close" type="button" aria-label="Fermer">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="hw-overlay-body" id="hw-overlay-body"></div>
+      <div class="button-row" style="width: 100%; max-width: 440px;" id="hw-overlay-actions"></div>
+    </div>
+  </main>
+
+  <!-- Bibliothèque d'icônes -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Lien vers le fichier JavaScript externe -->
+  <script src="app.js?v=13"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => {
+            console.log('[PWA] Service Worker registered:', reg.scope);
+            reg.update();
+          })
+          .catch(err => console.warn('[PWA] SW registration failed:', err));
+      });
+    }
+
+    // ─── PWA Install Modal ───
+    let deferredPrompt = null;
+    let modalShown = false;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (!modalShown) {
+        showPwaModal();
+      }
+    });
+
+    window.addEventListener('load', () => {
+      // Auto-trigger modal on initial load after brief delay
+      setTimeout(() => {
+        if (!modalShown) {
+          showPwaModal();
+        }
+      }, 400);
+    });
+
+    function showPwaModal() {
+      if (sessionStorage.getItem('pwa-dismissed')) return;
+      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) return;
+      if (document.getElementById('pwa-install-modal')) return;
+
+      modalShown = true;
+      const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+      const modal = document.createElement('div');
+      modal.id = 'pwa-install-modal';
+      modal.innerHTML = `
+        <div class="pwa-modal-backdrop"></div>
+        <div class="pwa-modal-card">
+          <div class="pwa-modal-header">
+            <img src="/icons/icon-192.png" alt="Telrepar" class="pwa-modal-icon" />
+            <div>
+              <h3 class="pwa-modal-title">Installer Telrepar</h3>
+              <small style="color:var(--accent); font-weight:700;">Accès direct 100% gratuit</small>
+            </div>
+          </div>
+          <p class="pwa-modal-desc">
+            Installe l'application sur ton écran d'accueil pour un accès instantané, même sans connexion internet !
+          </p>
+
+          <!-- Onglets OS -->
+          <div class="pwa-tabs">
+            <button type="button" class="pwa-tab-btn ${!isIOS ? 'active' : ''}" id="pwa-tab-android">🤖 Android</button>
+            <button type="button" class="pwa-tab-btn ${isIOS ? 'active' : ''}" id="pwa-tab-ios">🍎 iPhone / iPad</button>
+          </div>
+
+          <!-- Contenu Android -->
+          <div id="pwa-content-android" style="display: ${!isIOS ? 'block' : 'none'};">
+            <button type="button" id="pwa-action-android" class="pwa-modal-btn-primary">
+              <i data-lucide="download"></i><span>Installer en 1 clic</span>
+            </button>
+            <div id="pwa-android-feedback" style="display:none; font-size:12px; color:#4cd1a0; margin:6px 0 10px; font-weight:600;">
+              ✓ Demande envoyée à ton navigateur !
+            </div>
+
+            <div class="pwa-guide-box">
+              <div class="pwa-notice">
+                💡 <strong>Pas de fichier APK :</strong> l'application s'ajoute directement sur ton écran d'accueil sans prendre d'espace disque.
+              </div>
+              <div class="pwa-steps">
+                <div class="pwa-step-item">
+                  <span class="pwa-step-badge">1</span>
+                  <span>Si la fenêtre ne s'est pas ouverte, touche les <strong>3 petits points ⋮</strong> en haut à droite de ton navigateur.</span>
+                </div>
+                <div class="pwa-step-item">
+                  <span class="pwa-step-badge">2</span>
+                  <span>Sélectionne <strong>« Installer l'application »</strong> (ou « Ajouter à l'écran d'accueil »).</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contenu iOS -->
+          <div id="pwa-content-ios" style="display: ${isIOS ? 'block' : 'none'};">
+            <div class="pwa-guide-box">
+              <div class="pwa-notice">
+                ⚠️ <strong>Important :</strong> Tu dois obligatoirement être dans l'app <strong>Safari</strong> (pas Chrome ni l'aperçu WhatsApp/Instagram).
+              </div>
+              <div class="pwa-steps">
+                <div class="pwa-step-item">
+                  <span class="pwa-step-badge">1</span>
+                  <span>Touche l'icône <strong>Partager</strong> en bas de Safari (le carré avec la flèche ⬆).</span>
+                </div>
+                <div class="pwa-step-item">
+                  <span class="pwa-step-badge">2</span>
+                  <span><strong>Fais défiler la liste vers le bas</strong> sous les contacts et les applis.</span>
+                </div>
+                <div class="pwa-step-item">
+                  <span class="pwa-step-badge">3</span>
+                  <span>Touche la ligne <strong>« Sur l'écran d'accueil »</strong> (avec le ➕).</span>
+                </div>
+                <div class="pwa-step-item">
+                  <span class="pwa-step-badge">4</span>
+                  <span>En haut à droite, valide en touchant <strong>« Ajouter »</strong>.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Aide si l'option est introuvable -->
+            <div style="background: rgba(255, 176, 32, 0.06); border: 1px dashed rgba(255, 176, 32, 0.3); border-radius: 12px; padding: 12px; margin-bottom: 14px; text-align: left;">
+              <strong style="color: var(--accent); font-size: 12px; display: block; margin-bottom: 6px;">
+                🔍 Tu ne vois toujours pas le « ➕ Sur l'écran d'accueil » ?
+              </strong>
+              <ul style="margin: 0; padding-left: 18px; font-size: 11.5px; color: #ccc; line-height: 1.5;">
+                <li style="margin-bottom: 4px;"><strong>Tu es dans WhatsApp ou Instagram ?</strong> Touche les 3 points ou la boussole 🧭 en bas/haut pour choisir <em>« Ouvrir dans Safari »</em>.</li>
+                <li style="margin-bottom: 4px;"><strong>L'option est désactivée ?</strong> Descends tout en bas du menu Partager, clique sur <em>« Modifier les actions… »</em> et coche <strong>Sur l'écran d'accueil</strong>.</li>
+                <li><strong>Navigation privée :</strong> Si tu es en onglet privé, ouvre un onglet normal dans Safari.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pwa-perks-row">
+            <span>⚡ Lancement direct</span>
+            <span>📴 Mode hors-ligne</span>
+            <span>🔒 100% Anonyme</span>
+          </div>
+
+          <button type="button" id="pwa-modal-close" class="pwa-modal-btn-secondary">
+            Continuer dans le navigateur
+          </button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      requestAnimationFrame(() => modal.classList.add('pwa-modal-visible'));
+
+      // Tab switching
+      const tabAndroid = document.getElementById('pwa-tab-android');
+      const tabIOS = document.getElementById('pwa-tab-ios');
+      const contentAndroid = document.getElementById('pwa-content-android');
+      const contentIOS = document.getElementById('pwa-content-ios');
+
+      tabAndroid.addEventListener('click', () => {
+        tabAndroid.classList.add('active');
+        tabIOS.classList.remove('active');
+        contentAndroid.style.display = 'block';
+        contentIOS.style.display = 'none';
+      });
+
+      tabIOS.addEventListener('click', () => {
+        tabIOS.classList.add('active');
+        tabAndroid.classList.remove('active');
+        contentIOS.style.display = 'block';
+        contentAndroid.style.display = 'none';
+      });
+
+      // Android Install Button
+      const actionAndroid = document.getElementById('pwa-action-android');
+      const feedbackAndroid = document.getElementById('pwa-android-feedback');
+      if (actionAndroid) {
+        actionAndroid.addEventListener('click', async () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log('[PWA] Outcome:', outcome);
+            deferredPrompt = null;
+            if (outcome === 'accepted') {
+              closeModal();
+            } else {
+              feedbackAndroid.style.display = 'block';
+              feedbackAndroid.textContent = 'Tu peux aussi utiliser les 3 points ⋮ ci-dessous.';
+            }
+          } else {
+            feedbackAndroid.style.display = 'block';
+            feedbackAndroid.textContent = 'Suis les 2 étapes indiquées juste ci-dessous :';
+          }
+        });
+      }
+
+      function closeModal() {
+        modal.classList.remove('pwa-modal-visible');
+        modal.classList.add('pwa-modal-closing');
+        sessionStorage.setItem('pwa-dismissed', '1');
+        setTimeout(() => modal.remove(), 350);
+      }
+
+      document.getElementById('pwa-modal-close').addEventListener('click', closeModal);
+      modal.querySelector('.pwa-modal-backdrop').addEventListener('click', closeModal);
+    }
+
+    window.addEventListener('appinstalled', () => {
+      console.log('[PWA] App successfully installed!');
+      deferredPrompt = null;
+      const modal = document.getElementById('pwa-install-modal');
+      if (modal) modal.remove();
+    });
+  </script>
+</body>
+</html>
